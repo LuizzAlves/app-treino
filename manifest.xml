@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xsi:type="TaskPaneApp">
+
+  <Id>12345678-1234-1234-1234-123456789012</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Luiz Pereira</ProviderName>
+  <DefaultLocale>pt-BR</DefaultLocale>
+  <DisplayName DefaultValue="AppTreino"/>
+  <Description DefaultValue="Painel de controle de treinos integrado ao Excel"/>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/teste.html"/>
+  </DefaultSettings>
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+                    xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <DesktopFormFactor>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="AppTreinoGroup" label="AppTreino">
+                <Control id="OpenPanelButton" xsi:type="Button">
+                  <Label resid="OpenPanel.Label"/>
+                  <Supertip>
+                    <Title resid="OpenPanel.Label"/>
+                    <Description resid="OpenPanel.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>TaskpaneId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/icon.svg"/>
+        <bt:Image id="Icon.32" DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/icon.svg"/>
+      </bt:Images>
+
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/teste.html"/>
+      </bt:Urls>
+
+      <bt:ShortStrings>
+        <bt:String id="OpenPanel.Label" DefaultValue="Abrir Painel AppTreino"/>
+      </bt:ShortStrings>
+
+      <bt:LongStrings>
+        <bt:String id="OpenPanel.Tip" DefaultValue="Abre o painel de controle de treinos do AppTreino"/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

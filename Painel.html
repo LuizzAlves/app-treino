@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppTreino - Controle de Treinos</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 25%, #4a1942 50%, #1e3a5f 75%, #0f2847 100%);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100%;
+      padding: 24px;
+      padding-bottom: 24px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .app-title {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #b8b8ff;
+      opacity: 0.8;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #e0e0ff;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 0, 255, 0.3);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #ff00ff;
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 18px 24px;
+      border: none;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      color: #ffffff;
+      box-shadow: 0 8px 24px rgba(255, 0, 255, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(255, 0, 255, 0.6);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #6a00ff, #00d4ff);
+      color: #ffffff;
+      box-shadow: 0 8px 24px rgba(106, 0, 255, 0.4);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(106, 0, 255, 0.6);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #00ff88, #00ddff);
+      color: #001a33;
+      box-shadow: 0 8px 24px rgba(0, 255, 136, 0.4);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 255, 136, 0.6);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ff0055, #ff6600);
+      color: #ffffff;
+      box-shadow: 0 8px 24px rgba(255, 0, 85, 0.4);
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(255, 0, 85, 0.6);
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .muscle-group-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .muscle-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 0, 255, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .muscle-card:hover {
+      background: rgba(255, 0, 255, 0.15);
+      border-color: #ff00ff;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(255, 0, 255, 0.4);
+    }
+
+    .muscle-card.selected {
+      background: rgba(255, 0, 255, 0.2);
+      border-color: #ff00ff;
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+    }
+
+    .muscle-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .muscle-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .exercise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .exercise-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .exercise-card:hover {
+      background: rgba(0, 212, 255, 0.15);
+      border-color: #00d4ff;
+      transform: translateX(4px);
+    }
+
+    .exercise-card.selected {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+    }
+
+    .exercise-icon {
+      font-size: 24px;
+    }
+
+    .exercise-name {
+      font-size: 16px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .slider-container {
+      margin-bottom: 20px;
+    }
+
+    .slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.6);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 12px rgba(255, 0, 255, 0.6);
+    }
+
+    .slider-value {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 12px;
+      color: #00ffff;
+    }
+
+    .timer {
+      text-align: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      border: 2px solid rgba(0, 255, 136, 0.3);
+    }
+
+    .timer-label {
+      font-size: 14px;
+      color: #b8b8ff;
+      margin-bottom: 8px;
+    }
+
+    .timer-display {
+      font-size: 56px;
+      font-weight: 800;
+      color: #00ff88;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+    }
+
+    .summary-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid #00ffff;
+    }
+
+    .summary-label {
+      font-size: 12px;
+      color: #b8b8ff;
+      margin-bottom: 4px;
+    }
+
+    .summary-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .error-box {
+      background: rgba(255, 0, 85, 0.2);
+      border: 1px solid #ff0055;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      color: #ff88aa;
+    }
+
+    textarea.input-field {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        max-width: 480px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Tela 1: Inicial -->
+    <div class="screen active" id="screen-home">
+      <header class="header">
+        <h1 class="app-title">AppTreino – Controle de Treinos</h1>
+        <p class="subtitle">Pronto para treinar?</p>
+      </header>
+      <div style="display: flex; align-items: center; justify-content: center; min-height: 50vh;">
+        <button class="btn btn-primary" id="btn-start-workout" style="max-width: 400px; font-size: 24px; padding: 32px;">
+          <span style="font-size: 48px;">💪</span>
+          <span>Iniciar Treino</span>
+        </button>
+      </div>
+      <div class="card" style="text-align: center; background: rgba(255, 255, 255, 0.02);">
+        <p style="color: #b8b8ff; font-size: 14px;">Toque no botão acima para começar seu treino</p>
+      </div>
+    </div>
+
+    <!-- Tela 2: Seleção do Grupo Muscular -->
+    <div class="screen" id="screen-muscle-group">
+      <header class="header">
+        <h1 class="app-title">Grupo Muscular</h1>
+        <p class="subtitle">Qual grupo você vai treinar hoje?</p>
+      </header>
+      <div class="card">
+        <div class="muscle-group-grid" id="muscle-group-grid">
+          <!-- Preenchido dinamicamente via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tela 3: Seleção de Exercício -->
+    <div class="screen" id="screen-exercises">
+      <header class="header">
+        <h1 class="app-title">Exercícios</h1>
+        <p class="subtitle" id="selected-group-title">Escolha o exercício</p>
+      </header>
+      <div class="card">
+        <div class="exercise-list" id="exercise-list">
+          <!-- Preenchido dinamicamente via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tela 4: Peso da Série -->
+    <div class="screen" id="screen-weight">
+      <header class="header">
+        <h1 class="app-title">Carga</h1>
+        <p class="subtitle">Defina o peso para esta série</p>
+      </header>
+      <div class="card">
+        <div class="slider-container">
+          <input type="range" min="0" max="200" value="20" class="slider" id="weight-slider">
+          <div class="slider-value">
+            <span id="weight-value">20</span> Kg
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-success" id="btn-start-series" style="margin-top: 32px;">
+        <span>▶️</span>
+        <span>Iniciar Série</span>
+      </button>
+    </div>
+
+    <!-- Tela 5: Finalizar Série -->
+    <div class="screen" id="screen-finish-series">
+      <header class="header">
+        <h1 class="app-title">Finalizar Série</h1>
+        <p class="subtitle">Como foi a série?</p>
+      </header>
+      <div class="timer">
+        <div class="timer-label">Tempo da Série</div>
+        <div class="timer-display" id="series-timer">00:00</div>
+      </div>
+      <button class="btn btn-success" id="btn-end-series" style="margin-bottom: 32px;">
+        <span>✓</span>
+        <span>Finalizar Série</span>
+      </button>
+      <div class="card">
+        <h2 class="card-title">Há alguma observação?</h2>
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="btn-no-observation">
+            <span>✓</span>
+            <span>Não</span>
+          </button>
+          <button class="btn btn-primary" id="btn-yes-observation">
+            <span>📝</span>
+            <span>Sim</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tela 6: Observação -->
+    <div class="screen" id="screen-observation">
+      <header class="header">
+        <h1 class="app-title">Observação</h1>
+        <p class="subtitle">Adicione uma anotação</p>
+      </header>
+      <div class="card">
+        <div class="input-group">
+          <label class="input-label" for="notes">📝 Observação sobre a série</label>
+          <textarea id="notes" class="input-field" placeholder="Ex: Ombro doeu, aumentar carga na próxima..."></textarea>
+        </div>
+      </div>
+      <button class="btn btn-success" id="btn-save-observation">
+        <span>✓</span>
+        <span>Salvar e Continuar</span>
+      </button>
+    </div>
+
+    <!-- Tela 7: Continuar ou Finalizar -->
+    <div class="screen" id="screen-continue">
+      <header class="header">
+        <h1 class="app-title">Continuar</h1>
+        <p class="subtitle">Deseja fazer mais uma série?</p>
+      </header>
+      <div class="card" style="text-align: center; padding: 32px;">
+        <p style="font-size: 18px; margin-bottom: 32px; color: #e0e0ff;">O que deseja fazer?</p>
+        <button class="btn btn-primary" id="btn-new-series" style="margin-bottom: 16px;">
+          <span>🔄</span>
+          <span>Nova Série</span>
+        </button>
+        <button class="btn btn-secondary" id="btn-change-exercise" style="margin-bottom: 16px;">
+          <span>🏋️</span>
+          <span>Trocar Exercício</span>
+        </button>
+        <button class="btn btn-danger" id="btn-end-workout">
+          <span>🏁</span>
+          <span>Finalizar Treino</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela 8: Cardio -->
+    <div class="screen" id="screen-cardio">
+      <header class="header">
+        <h1 class="app-title">Cardio</h1>
+        <p class="subtitle">Você fez cardio hoje?</p>
+      </header>
+      <div class="card">
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="btn-no-cardio">
+            <span>✗</span>
+            <span>Não</span>
+          </button>
+          <button class="btn btn-success" id="btn-yes-cardio">
+            <span>✓</span>
+            <span>Sim</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tela 9: Tempo de Cardio -->
+    <div class="screen" id="screen-cardio-time">
+      <header class="header">
+        <h1 class="app-title">Tempo de Cardio</h1>
+        <p class="subtitle">Quantos minutos?</p>
+      </header>
+      <div class="card">
+        <div class="input-group">
+          <label class="input-label" for="cardio-minutes">⏱️ Minutos de cardio</label>
+          <input type="number" id="cardio-minutes" class="input-field" placeholder="Ex: 20" min="0">
+        </div>
+      </div>
+      <button class="btn btn-success" id="btn-save-cardio">
+        <span>✓</span>
+        <span>Salvar e Finalizar</span>
+      </button>
+    </div>
+
+    <!-- Tela 10: Treino Finalizado -->
+    <div class="screen" id="screen-completed">
+      <header class="header">
+        <h1 class="app-title">Treino Concluído!</h1>
+        <p class="subtitle">Parabéns pelo treino! 🎉</p>
+      </header>
+      <div class="card" style="text-align: center; padding: 48px 24px;">
+        <div style="font-size: 80px; margin-bottom: 24px;">🏆</div>
+        <h2 style="font-size: 24px; margin-bottom: 16px; color: #00ff88;">Excelente trabalho!</h2>
+        <p style="color: #b8b8ff; font-size: 16px;">Seus dados foram salvos com sucesso.</p>
+      </div>
+      <button class="btn btn-primary" id="btn-new-workout">
+        <span>🔄</span>
+        <span>Novo Treino</span>
+      </button>
+    </div>
+
+    <!-- Erro (debug) -->
+    <div class="error-box" id="error-box" style="display: none; position: fixed; top: 20px; right: 20px; max-width: 300px; z-index: 9999;"></div>
+  </div>
+
+  <script>
+    // Constantes e estado local
+    const SHEETS = { BASE: 'Basetreinos', TRAIN: 'Treinos', STATE: 'Estado' };
+    let selectedGroup = null;
+    let selectedExercise = null;
+    let selectedWeight = 20;
+    let seriesTimer = null;
+    let seriesSeconds = 0;
+    let currentSeriesStartTime = null;
+
+    // Função auxiliar: exibir erros na UI
+    function showError(msg) {
+      console.error(msg);
+      const box = document.getElementById('error-box');
+      if (box) {
+        box.textContent = msg;
+        box.style.display = 'block';
+        setTimeout(() => { box.style.display = 'none'; }, 5000);
+      }
+    }
+
+    // Função auxiliar: mudar tela
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+    }
+
+    // ===== INTEGRAÇÃO EXCEL =====
+
+    async function getSheetUsedRangeValues(sheetName) {
+      try {
+        return await Excel.run(async (context) => {
+          const sheet = context.workbook.worksheets.getItem(sheetName);
+          const used = sheet.getUsedRange();
+          used.load(['values', 'rowCount', 'columnCount']);
+          await context.sync();
+          const headers = used.values.length > 0 ? used.values[0] : [];
+          const rows = used.values.length > 1 ? used.values.slice(1) : [];
+          return { headers, rows, rowCount: used.rowCount, columnCount: used.columnCount };
+        });
+      } catch (err) {
+        showError(`Erro lendo ${sheetName}: ${err.message}`);
+        return { headers: [], rows: [], rowCount: 0, columnCount: 0 };
+      }
+    }
+
+    async function appendRowToSheet(sheetName, rowArray) {
+      try {
+        return await Excel.run(async (context) => {
+          const sheet = context.workbook.worksheets.getItem(sheetName);
+          const ur = sheet.getUsedRange();
+          ur.load(['rowIndex', 'rowCount', 'columnCount']);
+          await context.sync();
+          const writeRow = ur.rowIndex + ur.rowCount;
+          const range = sheet.getRangeByIndexes(writeRow, 0, 1, rowArray.length);
+          range.values = [rowArray];
+          await context.sync();
+          console.log(`Linha gravada em ${sheetName} na linha ${writeRow}`);
+        });
+      } catch (err) {
+        showError(`Erro gravando em ${sheetName}: ${err.message}`);
+      }
+    }
+
+    // ===== LÓGICA DE RENDERIZAÇÃO =====
+
+    function populateGroupsUI(rows) {
+      const groupsMap = new Map();
+      rows.forEach(r => {
+        const group = (r[0] || '').toString().trim();
+        const exercise = (r[1] || '').toString().trim();
+        if (!group) return;
+        if (!groupsMap.has(group)) groupsMap.set(group, new Set());
+        if (exercise) groupsMap.get(group).add(exercise);
+      });
+
+      const grid = document.getElementById('muscle-group-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (groupsMap.size === 0) {
+        grid.innerHTML = '<p style="color: #b8b8ff; padding: 20px;">Nenhum grupo muscular encontrado na aba Basetreinos.</p>';
+        return;
+      }
+
+      groupsMap.forEach((exSet, group) => {
+        const card = document.createElement('div');
+        card.className = 'muscle-card';
+        card.setAttribute('data-group', group);
+        card.innerHTML = `<div class="muscle-icon">💪</div><div class="muscle-name">${group}</div>`;
+        card.addEventListener('click', () => {
+          selectedGroup = group;
+          populateExercisesUI(Array.from(exSet), group);
+          showScreen('screen-exercises');
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function populateExercisesUI(exercises, group) {
+      const list = document.getElementById('exercise-list');
+      const title = document.getElementById('selected-group-title');
+      if (title) title.textContent = `Exercícios — ${group}`;
+      if (!list) return;
+      list.innerHTML = '';
+
+      exercises.forEach(ex => {
+        const item = document.createElement('div');
+        item.className = 'exercise-card';
+        item.setAttribute('data-exercise', ex);
+        item.innerHTML = `<span class="exercise-icon">🏋️</span><span class="exercise-name">${ex}</span>`;
+        item.addEventListener('click', () => {
+          selectedExercise = ex;
+          showScreen('screen-weight');
+        });
+        list.appendChild(item);
+      });
+    }
+
+    async function loadBaseTreinosIntoUI() {
+      const data = await getSheetUsedRangeValues(SHEETS.BASE);
+      console.log('Basetreinos headers:', data.headers);
+      populateGroupsUI(data.rows);
+    }
+
+    async function recordTreinoEntry(entryObj) {
+      const ordered = [
+        entryObj.Data || '',
+        entryObj.Inicio || '',
+        entryObj.Finalizado || '',
+        entryObj['Grupo Muscular'] || '',
+        entryObj.Exercicio || '',
+        entryObj.Carga || '',
+        entryObj.Series || '',
+        entryObj.Repeticoes || '',
+        entryObj.Duracao || '',
+        entryObj.Observacao || '',
+        entryObj.Dia || '',
+        entryObj.InicioDoTreino || '',
+        entryObj.FinalizacaoDoTreino || '',
+        entryObj.Cardio || '',
+        entryObj.TempoCardio || ''
+      ];
+      await appendRowToSheet(SHEETS.TRAIN, ordered);
+    }
+
+    // ===== HANDLERS DE BOTÕES =====
+
+    function attachUIHandlers() {
+      // Tela 1: Iniciar treino
+      const startBtn = document.getElementById('btn-start-workout');
+      if (startBtn) startBtn.addEventListener('click', () => {
+        showScreen('screen-muscle-group');
+      });
+
+      // Tela 4: Slider de peso
+      const weightSlider = document.getElementById('weight-slider');
+      const weightValue = document.getElementById('weight-value');
+      if (weightSlider && weightValue) {
+        weightSlider.addEventListener('input', (e) => {
+          selectedWeight = e.target.value;
+          weightValue.textContent = selectedWeight;
+        });
+      }
+
+      // Tela 4: Iniciar série
+      const startSeriesBtn = document.getElementById('btn-start-series');
+      if (startSeriesBtn) {
+        startSeriesBtn.addEventListener('click', () => {
+          seriesSeconds = 0;
+          currentSeriesStartTime = new Date();
+          document.getElementById('series-timer').textContent = '00:00';
+          if (seriesTimer) clearInterval(seriesTimer);
+          seriesTimer = setInterval(() => {
+            seriesSeconds++;
+            const minutes = Math.floor(seriesSeconds / 60);
+            const seconds = seriesSeconds % 60;
+            document.getElementById('series-timer').textContent =
+              `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+          }, 1000);
+          showScreen('screen-finish-series');
+        });
+      }
+
+      // Tela 5: Finalizar série
+      const endSeriesBtn = document.getElementById('btn-end-series');
+      if (endSeriesBtn) {
+        endSeriesBtn.addEventListener('click', async () => {
+          if (seriesTimer) clearInterval(seriesTimer);
+          const entry = {
+            Data: new Date().toLocaleDateString('pt-BR'),
+            Inicio: new Date().toLocaleTimeString('pt-BR'),
+            Finalizado: '',
+            'Grupo Muscular': selectedGroup || '',
+            Exercicio: selectedExercise || '',
+            Carga: selectedWeight || '',
+            Series: 1,
+            Repeticoes: '',
+            Duracao: seriesSeconds || '',
+            Observacao: document.getElementById('notes') ? document.getElementById('notes').value : ''
+          };
+          try {
+            await recordTreinoEntry(entry);
+            console.log('Série registrada com sucesso');
+          } catch (err) {
+            showError(`Erro ao registrar série: ${err.message}`);
+          }
+        });
+      }
+
+      // Tela 5: Observação - Não
+      const noObsBtn = document.getElementById('btn-no-observation');
+      if (noObsBtn) {
+        noObsBtn.addEventListener('click', () => {
+          showScreen('screen-continue');
+        });
+      }
+
+      // Tela 5: Observação - Sim
+      const yesObsBtn = document.getElementById('btn-yes-observation');
+      if (yesObsBtn) {
+        yesObsBtn.addEventListener('click', () => {
+          showScreen('screen-observation');
+        });
+      }
+
+      // Tela 6: Salvar observação
+      const saveObsBtn = document.getElementById('btn-save-observation');
+      if (saveObsBtn) {
+        saveObsBtn.addEventListener('click', () => {
+          document.getElementById('notes').value = '';
+          showScreen('screen-continue');
+        });
+      }
+
+      // Tela 7: Nova série
+      const newSeriesBtn = document.getElementById('btn-new-series');
+      if (newSeriesBtn) {
+        newSeriesBtn.addEventListener('click', () => {
+          showScreen('screen-weight');
+        });
+      }
+
+      // Tela 7: Trocar exercício
+      const changeExerciseBtn = document.getElementById('btn-change-exercise');
+      if (changeExerciseBtn) {
+        changeExerciseBtn.addEventListener('click', () => {
+          showScreen('screen-exercises');
+        });
+      }
+
+      // Tela 7: Finalizar treino
+      const endWorkoutBtn = document.getElementById('btn-end-workout');
+      if (endWorkoutBtn) {
+        endWorkoutBtn.addEventListener('click', () => {
+          showScreen('screen-cardio');
+        });
+      }
+
+      // Tela 8: Cardio - Não
+      const noCardioBtn = document.getElementById('btn-no-cardio');
+      if (noCardioBtn) {
+        noCardioBtn.addEventListener('click', () => {
+          showScreen('screen-completed');
+        });
+      }
+
+      // Tela 8: Cardio - Sim
+      const yesCardioBtn = document.getElementById('btn-yes-cardio');
+      if (yesCardioBtn) {
+        yesCardioBtn.addEventListener('click', () => {
+          showScreen('screen-cardio-time');
+        });
+      }
+
+      // Tela 9: Salvar cardio
+      const saveCardioBtn = document.getElementById('btn-save-cardio');
+      if (saveCardioBtn) {
+        saveCardioBtn.addEventListener('click', () => {
+          document.getElementById('cardio-minutes').value = '';
+          showScreen('screen-completed');
+        });
+      }
+
+      // Tela 10: Novo treino
+      const newWorkoutBtn = document.getElementById('btn-new-workout');
+      if (newWorkoutBtn) {
+        newWorkoutBtn.addEventListener('click', () => {
+          selectedGroup = null;
+          selectedExercise = null;
+          selectedWeight = 20;
+          document.getElementById('weight-slider').value = 20;
+          document.getElementById('weight-value').textContent = 20;
+          showScreen('screen-home');
+        });
+      }
+    }
+
+    // ===== INICIALIZAÇÃO =====
+
+    Office.onReady((info) => {
+      console.log('Office.onReady chamado:', info);
+      if (info.host === Office.HostType.Excel) {
+        console.log('✓ Excel detectado. Inicializando AppTreino...');
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            attachUIHandlers();
+            loadBaseTreinosIntoUI();
+          });
+        } else {
+          attachUIHandlers();
+          loadBaseTreinosIntoUI();
+        }
+      } else {
+        showError('Este add-in requer Microsoft Excel');
+      }
+    });
+  </script>
+</body>
+</html>
