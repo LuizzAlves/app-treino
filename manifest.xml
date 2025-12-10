@@ -1,27 +1,41 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:bt="http://schemas.microsoft.com/office/appforoffice/1.1"
            xsi:type="TaskPaneApp">
 
-  <Id>12345678-1234-1234-1234-123456789012</Id>
+  <Id>a9c1e0f7-7b6f-5d4a-0g3c-234567890def</Id>
   <Version>1.0.0.0</Version>
   <ProviderName>Luiz Pereira</ProviderName>
   <DefaultLocale>pt-BR</DefaultLocale>
-  <DisplayName DefaultValue="AppTreino"/>
+  <DisplayName DefaultValue="AppTreino - Painel de Controle"/>
   <Description DefaultValue="Painel de controle de treinos integrado ao Excel"/>
+
+  <!-- Ícone padrão (não obrigatório se não existir) -->
+  <IconUrl DefaultValue="https://1drv.ms/u/c/fba4295655cdb476/IQAyGMyv1uu_SK-RIl2RAlYeAblH_2BhSkFOBU4x6nySMAs?e=aq03du&download=1"/>
+  <SupportUrl DefaultValue="https://support.microsoft.com/office/"/>
+
   <Hosts>
     <Host Name="Workbook"/>
   </Hosts>
 
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="File"/>
+    </Sets>
+  </Requirements>
+
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/teste.html"/>
+    <SourceLocation DefaultValue="https://1drv.ms/u/c/fba4295655cdb476/IQAZerPq9N_nR46U6uyWehf1Aadz8ZgtuA4gOv9jR-Wh6os?e=omjga7"/>
   </DefaultSettings>
 
   <Permissions>ReadWriteDocument</Permissions>
 
-  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+                    xmlns:mso="http://schemas.microsoft.com/office/mso/1.1"
+                    xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
                     xsi:type="VersionOverridesV1_0">
+
     <Hosts>
       <Host xsi:type="Workbook">
         <DesktopFormFactor>
@@ -52,12 +66,12 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16" DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/icon.svg"/>
-        <bt:Image id="Icon.32" DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/icon.svg"/>
+        <bt:Image id="Icon.16" DefaultValue="https://1drv.ms/u/c/fba4295655cdb476/IQAyGMyv1uu_SK-RIl2RAlYeAblH_2BhSkFOBU4x6nySMAs?e=aq03du&download=1"/>
+        <bt:Image id="Icon.32" DefaultValue="https://1drv.ms/u/c/fba4295655cdb476/IQAyGMyv1uu_SK-RIl2RAlYeAblH_2BhSkFOBU4x6nySMAs?e=aq03du&download=1"/>
       </bt:Images>
 
       <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://raw.githubusercontent.com/LuizzAlves/app-treino/main/teste.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://1drv.ms/u/c/fba4295655cdb476/IQAyGMyv1uu_SK-RIl2RAlYeAblH_2BhSkFOBU4x6nySMAs?e=aq03du&download=1"/>
       </bt:Urls>
 
       <bt:ShortStrings>
@@ -68,5 +82,12 @@
         <bt:String id="OpenPanel.Tip" DefaultValue="Abre o painel de controle de treinos do AppTreino"/>
       </bt:LongStrings>
     </Resources>
+
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.1">
+        <bt:Set Name="File"/>
+      </bt:Sets>
+    </Requirements>
+
   </VersionOverrides>
 </OfficeApp>
